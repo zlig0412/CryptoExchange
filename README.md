@@ -1,2 +1,2 @@
 # CryptoExchange
-A crypto asset CEX java demo repo.
+A crypto asset CEX java backend demo.
