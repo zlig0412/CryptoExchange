@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: docker.1ms.run/library/postgres
+    container_name: CEX-postgres
+    environment:
+      POSTGRES_USER: casdoor_cex
+      POSTGRES_PASSWORD: casdoor_cex_pwd
+      POSTGRES_DB: casdoor
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql
+    networks:
+      - cex-network
+
+  redis:
+    image: docker.1ms.run/library/redis
+    container_name: CEX-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    networks:
+      - cex-network
+
+  casdoor:
+    image: casbin/casdoor
+    container_name: CEX-casdoor
+    ports:
+      - "8000:8000"
+    environment:
+      - driverName=postgres
+      - dataSourceName=postgres://casdoor_cex:casdoor_cex_pwd@postgres:5432/casdoor?sslmode=disable
+      - dbName=casdoor
+      - tableNamePrefix=
+      - origin=http://localhost:8000
+      - enableGzip=true
+      - isCloudIntranet=false
+      - redisEndpoint=redis:6379  # 关键！用服务名连接Redis
+    depends_on:
+      - postgres
+      - redis  # 确保Redis先启动
+    networks:
+      - cex-network
+
+networks:
+  cex-network:
+    driver: bridge
