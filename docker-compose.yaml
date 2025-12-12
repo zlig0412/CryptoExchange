@@ -27,6 +27,7 @@ services:
   casdoor:
     image: casbin/casdoor
     container_name: CEX-casdoor
+    #entrypoint: ["sh", "-c", "sleep 100 && go run main.go"]
     ports:
       - "8000:8000"
     environment:
