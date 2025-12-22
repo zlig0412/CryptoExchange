@@ -24,6 +24,24 @@ services:
     networks:
       - cex-network
 
+  nacos:
+    image: docker.1ms.run/nacos/nacos-server
+    container_name: CEX-nacos
+    environment:
+      MODE: standalone
+      NACOS_AUTH_ENABLE: false
+      NACOS_AUTH_TOKEN: Iyo2Cemx///gtRZLoyP2cO9q09l6ya2FeKA8FRT7DuY=
+      NACOS_AUTH_IDENTITY_KEY: NACOS_KEY
+      NACOS_AUTH_IDENTITY_VALUE: NACOS_VALUE
+    ports:
+      - "8845:8848"
+      - "9848:9848"
+    volumes:
+      - ./nacos-data/logs:/home/nacos/logs
+      - ./nacos-data/data:/home/nacos/data
+    networks:
+      - cex-network
+
   casdoor:
     image: casbin/casdoor
     container_name: CEX-casdoor
@@ -38,10 +56,10 @@ services:
       - origin=http://localhost:8000
       - enableGzip=true
       - isCloudIntranet=false
-      - redisEndpoint=redis:6379  # 关键！用服务名连接Redis
+      - redisEndpoint=redis:6379  # Connect with redis service name.
     depends_on:
       - postgres
-      - redis  # 确保Redis先启动
+      - redis  # Ensure redis was started firstly.
     networks:
       - cex-network
 
