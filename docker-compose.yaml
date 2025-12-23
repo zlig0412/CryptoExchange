@@ -34,7 +34,8 @@ services:
       NACOS_AUTH_IDENTITY_KEY: NACOS_KEY
       NACOS_AUTH_IDENTITY_VALUE: NACOS_VALUE
     ports:
-      - "8845:8848"
+      - "8080:8080"
+      - "8848:8848"
       - "9848:9848"
     volumes:
       - ./nacos-data/logs:/home/nacos/logs
