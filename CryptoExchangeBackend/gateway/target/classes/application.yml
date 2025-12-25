@@ -1,3 +1,6 @@
+spring:
+  application:
+    name: cex-gateway
 server:
     port: 8888
         
@@ -8,6 +11,7 @@ logging:
     '[org.springframework.web.reactive]': DEBUG         # WebFlux 请求日志
     '[reactor.netty.http.client]': DEBUG                # Netty 客户端（下游调用）
     '[org.springframework.cloud.loadbalancer]': INFO    # 负载均衡日志
+    '[org.springframework.web.reactive.handler.RoutePredicateHandlerMapping]': TRACE
 
     # 自定义包日志
     #'[com.yourcompany.gateway.filter]': DEBUG           # 你的认证过滤器
@@ -20,6 +24,9 @@ logging:
     file: "[%d{yyyy-MM-dd HH:mm:ss}] - %msg [%thread %-5level %logger{36}]%n"
 
 management:
+  endpoint:
+    gateway:
+      enabled: true
   endpoints:
     web:
       exposure:
