@@ -51,6 +51,7 @@ export async function GetCurrentUser(req: Request){
         
         if(tokenContent){
             const payload = await extractUserInfo(tokenContent || "");
+            console.log(payload);
             const userInfo = {
                 id: payload.sub,
                 name: payload.name,

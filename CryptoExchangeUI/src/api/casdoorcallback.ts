@@ -42,8 +42,8 @@ export async function CasdoorCallback(req: Request){
               "Content-Type": "application/json",
               "Set-Cookie": cookie, // 浏览器会自动存储这个 Cookie
             // 如果跨域，还需：
-            // "Access-Control-Allow-Origin": "http://localhost:5173",
-            // "Access-Control-Allow-Credentials": "true"
+              "Access-Control-Allow-Origin": "http://localhost:8888",
+              "Access-Control-Allow-Credentials": "true"
           },
         }
       );

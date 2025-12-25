@@ -13,7 +13,6 @@ export function LoginButton() {
               })
                 .then(res => res.json())
                 .then(data => {
-                  console.log(data);
                   if (data.success) {
                     setUserName(data.user.name);
                     setIsLoggedin(true);
@@ -45,9 +44,6 @@ export function LoginButton() {
                 });
         }
     }
-
-    console.log(isLoggedin);
-    console.log(userName);
 
     return isLoggedin ? <button onClick={handleClick}>Log out {userName}</button>:<button onClick={handleClick}>Sign in with SSO</button>;
 }
