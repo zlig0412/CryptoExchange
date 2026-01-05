@@ -12,6 +12,13 @@
     </parent>
 
     <!-- 当前模块名称 -->
-    <artifactId>trading-engine</artifactId>
+    <artifactId>tradingengine</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+    
 </project>
