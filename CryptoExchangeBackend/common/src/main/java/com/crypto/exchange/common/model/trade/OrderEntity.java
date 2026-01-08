@@ -3,8 +3,6 @@ package com.crypto.exchange.common.model.trade;
 import java.beans.Transient;
 import java.math.BigDecimal;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
 import com.crypto.exchange.common.enums.Direction;
 import com.crypto.exchange.common.enums.OrderStatus;
 import com.crypto.exchange.common.model.support.EntitySupport;
@@ -93,8 +91,7 @@ public class OrderEntity implements EntitySupport, Comparable<OrderEntity> {
         if (this == o) {
             return true;
         }
-        if (o instanceof OrderEntity) {
-            OrderEntity e = (OrderEntity) o;
+        if (o instanceof OrderEntity e) {
             return this.id.longValue() == e.id.longValue();
         }
         return false;
@@ -118,7 +115,7 @@ public class OrderEntity implements EntitySupport, Comparable<OrderEntity> {
      */
     @Override
     public int compareTo(OrderEntity o) {
-        return Long.compare(this.id.longValue(), o.id.longValue());
+        return Long.compare(this.id, o.id);
     }
     
 }

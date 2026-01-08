@@ -17,4 +17,8 @@ public enum Direction {
     public Direction negate(){
         return this == BUY ? SELL : BUY;
     }
+
+    public int getValue() {
+        return value;
+    }
 }

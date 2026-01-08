@@ -12,4 +12,8 @@ public enum OrderStatus {
     OrderStatus(boolean isFinalStatus){
         this.isFinalStatus = isFinalStatus;
     }
+
+    public boolean isFinalStatus(){
+        return isFinalStatus;
+    }
 }
