@@ -1,6 +1,6 @@
 package com.crypto.exchange.common.enums;
 
-public enum AssetEnum {
+public enum AssetType {
     BTC,
     ETH,
     USDT;

@@ -1,0 +1,14 @@
+
+CREATE TABLE orders (
+  id BIGINT NOT NULL,
+  createdAt BIGINT NOT NULL,
+  direction VARCHAR(32) NOT NULL,
+  price DECIMAL(36,18) NOT NULL,
+  quantity DECIMAL(36,18) NOT NULL,
+  sequenceId BIGINT NOT NULL,
+  status VARCHAR(32) NOT NULL,
+  unfilledQuantity DECIMAL(36,18) NOT NULL,
+  updatedAt BIGINT NOT NULL,
+  userId BIGINT NOT NULL,
+  PRIMARY KEY(id)
+) CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT = 1000;
