@@ -1,14 +1,138 @@
+CREATE TABLE day_bars(
+    start_time bigint NOT NULL,
+    open_price numeric(36,18) NOT NULL,
+    close_price numeric(36,18) NOT NULL,
+    high_price numeric(36,18) NOT NULL,
+    low_price numeric(36,18) NOT NULL,
+    volume numeric(36,18) NOT NULL,
+    PRIMARY KEY(start_time)
+);
 
-CREATE TABLE orders (
-  id BIGINT NOT NULL,
-  createdAt BIGINT NOT NULL,
-  direction VARCHAR(32) NOT NULL,
-  price DECIMAL(36,18) NOT NULL,
-  quantity DECIMAL(36,18) NOT NULL,
-  sequenceId BIGINT NOT NULL,
-  status VARCHAR(32) NOT NULL,
-  unfilledQuantity DECIMAL(36,18) NOT NULL,
-  updatedAt BIGINT NOT NULL,
-  userId BIGINT NOT NULL,
-  PRIMARY KEY(id)
-) CHARACTER SET utf8 COLLATE utf8_general_ci AUTO_INCREMENT = 1000;
+CREATE TABLE hour_bars(
+    start_time bigint NOT NULL,
+    open_price numeric(36,18) NOT NULL,
+    close_price numeric(36,18) NOT NULL,
+    high_price numeric(36,18) NOT NULL,
+    low_price numeric(36,18) NOT NULL,
+    volume numeric(36,18) NOT NULL,
+    PRIMARY KEY(start_time)
+);
+
+CREATE TABLE min_bars(
+    start_time bigint NOT NULL,
+    open_price numeric(36,18) NOT NULL,
+    close_price numeric(36,18) NOT NULL,
+    high_price numeric(36,18) NOT NULL,
+    low_price numeric(36,18) NOT NULL,
+    volume numeric(36,18) NOT NULL,
+    PRIMARY KEY(start_time)
+);
+
+CREATE TABLE sec_bars(
+    start_time bigint NOT NULL,
+    open_price numeric(36,18) NOT NULL,
+    close_price numeric(36,18) NOT NULL,
+    high_price numeric(36,18) NOT NULL,
+    low_price numeric(36,18) NOT NULL,
+    volume numeric(36,18) NOT NULL,
+    PRIMARY KEY(start_time)
+);
+
+CREATE TABLE ticks(
+    id bigint NOT NULL,
+    sequence_id bigint NOT NULL,
+    taker_order_id bigint NOT NULL,
+    maker_order_id bigint NOT NULL,
+    taker_direction boolean NOT NULL,
+    price numeric(36,18) NOT NULL,
+    quantity numeric(36,18) NOT NULL,
+    created_at bigint NOT NULL,
+    PRIMARY KEY(id)
+);
+CREATE UNIQUE INDEX uni_t_m ON public.ticks USING btree (taker_order_id, maker_order_id);
+CREATE INDEX idx_cat ON public.ticks USING btree (created_at);
+
+CREATE TABLE clearings(
+    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+    sequence_id bigint NOT NULL,
+    order_id bigint NOT NULL,
+    counter_order_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    counter_user_id bigint NOT NULL,
+    direction smallint NOT NULL,
+    "type" smallint NOT NULL,
+    match_price numeric(36,18) NOT NULL,
+    match_quantity numeric(36,18) NOT NULL,
+    order_status_after_clearing smallint NOT NULL,
+    order_unfilled_quantity_after_clearing numeric(36,18) NOT NULL,
+    create_at bigint NOT NULL,
+    PRIMARY KEY(id),
+    CONSTRAINT clearings_direction_check CHECK ((direction >= 0) AND (direction <= 1)),
+    CONSTRAINT clearings_order_status_after_clearing_check CHECK ((order_status_after_clearing >= 0) AND (order_status_after_clearing <= 4)),
+    CONSTRAINT clearings_type_check CHECK ((type >= 0) AND (type <= 2))
+);
+CREATE UNIQUE INDEX uni_seq_ord_cord ON public.clearings USING btree (sequence_id, order_id, counter_order_id);
+
+CREATE TABLE events(
+    sequence_id bigint NOT NULL,
+    previous_id bigint NOT NULL,
+    "data" varchar(10000) NOT NULL,
+    created_at bigint NOT NULL,
+    PRIMARY KEY(sequence_id)
+);
+CREATE UNIQUE INDEX uni_pre_id ON public.events USING btree (previous_id);
+
+CREATE TABLE match_details(
+    id bigint GENERATED ALWAYS AS IDENTITY NOT NULL,
+    sequence_id bigint NOT NULL,
+    order_id bigint NOT NULL,
+    counter_order_id bigint NOT NULL,
+    user_id bigint NOT NULL,
+    counter_user_id bigint NOT NULL,
+    "type" smallint NOT NULL,
+    direction smallint NOT NULL,
+    price numeric(36,18) NOT NULL,
+    quantity numeric(36,18) NOT NULL,
+    created_at bigint NOT NULL,
+    PRIMARY KEY(id),
+    CONSTRAINT match_details_direction_check CHECK ((direction >= 0) AND (direction <= 1)),
+    CONSTRAINT match_details_type_check CHECK ((type >= 0) AND (type <= 1))
+);
+CREATE UNIQUE INDEX uni_oid_coid ON public.match_details USING btree (order_id, counter_order_id);
+CREATE INDEX idx_oid_ct ON public.match_details USING btree (order_id, created_at);
+
+CREATE TABLE orders(
+    id bigint NOT NULL,
+    sequence_id bigint NOT NULL,
+    direction smallint NOT NULL,
+    user_id bigint NOT NULL,
+    status smallint NOT NULL,
+    price numeric(36,18) NOT NULL,
+    created_at bigint NOT NULL,
+    updated_at bigint NOT NULL,
+    quantity numeric(36,18) NOT NULL,
+    unfilled_quantity numeric(36,18) NOT NULL,
+    PRIMARY KEY(id),
+    CONSTRAINT orders_direction_check CHECK ((direction >= 0) AND (direction <= 1)),
+    CONSTRAINT orders_status_check CHECK ((status >= 0) AND (status <= 4))
+);
+
+CREATE TABLE transfer_logs(
+    trasfer_id varchar(32) NOT NULL,
+    asset_type smallint NOT NULL,
+    amount numeric(36,18) NOT NULL,
+    user_id bigint NOT NULL,
+    created_at bigint NOT NULL,
+    "type" varchar(32) NOT NULL,
+    status varchar(32) NOT NULL,
+    PRIMARY KEY(trasfer_id),
+    CONSTRAINT transfer_logs_asset_type_check CHECK ((asset_type >= 0) AND (asset_type <= 2))
+);
+
+-- Generated by the database client.
+CREATE TABLE unique_events(
+    unique_id varchar(50) NOT NULL,
+    sequence_id bigint NOT NULL,
+    created_at bigint NOT NULL,
+    PRIMARY KEY(unique_id)
+);
